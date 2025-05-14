@@ -71,7 +71,7 @@ const roomName = await select({
 });
 
 const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
-at.identity = "ROBOT";
+at.identity = "NDI_ROBOT";
 
 at.addGrant({ roomJoin: true, room: roomName });
 
