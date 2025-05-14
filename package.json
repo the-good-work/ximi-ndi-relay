@@ -1,5 +1,5 @@
 {
-  "name": "test-livekit-realtime-nodejs",
+  "name": "ximi-ndi-relay",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
