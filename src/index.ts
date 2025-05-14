@@ -15,6 +15,7 @@ import grandiose from "grandiose";
 
 import { readFile } from "node:fs/promises";
 import { select } from "@inquirer/prompts";
+import { createSpinner } from "nanospinner";
 
 const serversListTxt = await readFile("./servers.json", {
   encoding: "utf8",
@@ -45,7 +46,21 @@ const svc = new RoomServiceClient(
   LIVEKIT_API_KEY,
   LIVEKIT_API_SECRET
 );
-const rooms = await svc.listRooms([]);
+
+let rooms: Awaited<ReturnType<typeof svc.listRooms>> = [];
+
+const spinner = createSpinner("Waiting for rooms").start();
+
+while (rooms.length < 1) {
+  rooms = await svc.listRooms([]);
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(null);
+    }, 1000);
+  });
+}
+
+spinner.success();
 
 const roomName = await select({
   message: "Select room",
