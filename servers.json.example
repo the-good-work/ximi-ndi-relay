@@ -1,0 +1,9 @@
+[
+  {
+    "NAME": "XIMI Hosted Livekit",
+    "LIVEKIT_URL": "https://<url here>",
+    "LIVEKIT_API_KEY": "<api key here>",
+    "LIVEKIT_API_SECRET": "<api secret here>"
+  },
+
+]
