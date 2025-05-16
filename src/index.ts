@@ -177,19 +177,17 @@ room
 
       audiostream.on("data", (chunk: AudioFrame) => {
         if (typeof ndiSenderDict[participant.identity] !== "undefined") {
-          console.log(ndiSenderDict[participant.identity]);
-          return;
           ndiSenderDict[participant.identity].audio({
             sampleRate: chunk.sampleRate,
             channels: chunk.channels,
-            timestamp: [new Date().getTime(), 0],
-            timecode: [0, 0],
             data: Buffer.from(chunk.data),
             samples: chunk.samplesPerChannel,
-            channelStrideInBytes: chunk.samplesPerChannel,
+            channelStrideInBytes: chunk.sampleRate,
             type: "audio",
-            referenceLevel: 0.063,
-            audioFormat: grandiose.AudioFormat.Float32Interleaved,
+            // audioFormat: grandiose.AudioFormat.Float32Interleaved,
+            // timestamp: [new Date().getTime(), 0],
+            // timecode: [0, 0],
+            // referenceLevel: 0.0,
           });
         }
       });
