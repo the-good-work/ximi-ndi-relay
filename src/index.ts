@@ -176,18 +176,28 @@ room
       });
 
       audiostream.on("data", (chunk: AudioFrame) => {
+        const arrInt = new Int16Array(chunk.data);
+        const arrFloat = new Float32Array(arrInt.length);
+
+        for (let i = 0; i < arrInt.length; i++) {
+          const limit = Math.pow(2, 16) - 1;
+          arrFloat[i] =
+            Math.max(-1 * limit, Math.min(limit, Number(arrInt[i]))) / limit;
+        }
+
+        const buffer = Buffer.alloc(4 * arrFloat.length);
+        for (let i = 0; i < arrFloat.length; i++) {
+          buffer.writeFloatLE(arrFloat[i], i * 4); // Little-endian format
+        }
+
         if (typeof ndiSenderDict[participant.identity] !== "undefined") {
           ndiSenderDict[participant.identity].audio({
             sampleRate: chunk.sampleRate,
             channels: chunk.channels,
-            data: Buffer.from(chunk.data),
+            data: buffer,
             samples: chunk.samplesPerChannel,
-            channelStrideInBytes: chunk.sampleRate,
+            channelStrideInBytes: 4,
             type: "audio",
-            // audioFormat: grandiose.AudioFormat.Float32Interleaved,
-            // timestamp: [new Date().getTime(), 0],
-            // timecode: [0, 0],
-            // referenceLevel: 0.0,
           });
         }
       });
